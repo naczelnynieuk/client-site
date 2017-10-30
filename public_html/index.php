@@ -1,9 +1,7 @@
 <?php
 require('../core/init.php');
 
-
 try {
-
 //system szablonow
 $tpl = new \MyApp\Tpl\Engine('../templates/'. \MyApp\Config::get('system/default_template'));
 $view = $tpl->createView(['header', 'index', 'footer']);
@@ -12,6 +10,7 @@ $view = $tpl->createView(['header', 'index', 'footer']);
 $view->title = \MyApp\Config::get('system/default_title');
 $view->lang = \MyApp\Config::get('system/default_lang');
 $view->charset = \MyApp\Config::get('system/charset');
+$view->url = \MyApp\Config::get('system/url');
 
 //wiadomosci flash
 $flash = null;

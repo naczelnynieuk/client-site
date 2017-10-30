@@ -46,6 +46,9 @@ class Validation {
 				case 'matchpassword':
 					$this->matchPassword($value);
 					break;
+				case 'notUsed':
+					$this->notUsed($value);
+					break;
 				default:
 					break;
 			}
@@ -105,6 +108,19 @@ class Validation {
 			}
 		}
 	}
+
+	private function notUsed($value){
+
+		if($value){
+			$where = ['hash', '=', $this->_data];
+			$this->_result = self::$_instance->select('orders', $where)[0];
+			if ($this->_result['client_id'] != 0 ) {
+				self::$_errors[]= 'Kod został już wykorzystany' ;
+			}
+		}
+
+	}
+
 	private function existDb($value){
 		$path = explode('/', $value);
 		$where = [$path[1], '=', $this->_data];

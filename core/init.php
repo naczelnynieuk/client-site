@@ -1,11 +1,11 @@
 <?php
 session_start();
-require('./../core/functions.php');
+require('C:/xampp/htdocs/client-site/core/functions.php');
 spl_autoload_register(function($className){
-	require('./../classes//'.$className.'.php');
+	require('C:/xampp/htdocs/client-site/classes//'.$className.'.php');
 });
 
-\MyApp\Config::downloadConfig('./../config/cfg.ini');
+\MyApp\Config::downloadConfig('C:/xampp/htdocs/client-site/config/cfg.ini');
 //error_reporting(\MyApp\Config::get('system/error_reporting'));
 
 if(\MyApp\Cookie::exists(\MyApp\Config::get('remember/cookie_name')) && !\MyApp\Session::exists(\MyApp\Config::get('session/session_name'))) {

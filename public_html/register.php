@@ -18,9 +18,14 @@ $view = $tpl->createView(['header', 'register', 'footer']);
 $view->title = \MyApp\Config::get('system/default_title').'-register';
 $view->lang = \MyApp\Config::get('system/default_lang');
 $view->charset = \MyApp\Config::get('system/charset');
+$view->url = \MyApp\Config::get('system/url');
 
 
-$form = array('username'=>'','email'=>'');
+$form = array(
+	'username'=>'',
+	'email'=>'',
+	'order_code'=>''
+);
 
 
 
@@ -50,6 +55,11 @@ if (isset($_POST['register'])) {
 			'notExistDb'=>'users/email'
 			]);
 
+		$form_data[] = new \MyApp\Validation('Kod zamówienia',$_POST['order_code'], [
+			'existDb'=>'orders/hash',
+			'notUsed' => true
+			]);
+
 		foreach ($form_data as $data) {
 			$data->validate();
 		}
@@ -58,16 +68,31 @@ if (isset($_POST['register'])) {
 		if(!($view->errors = $form_data[0]->getErrors())){
 			$user = new \MyApp\User();
 			$user->register([
-				'username'=>trim($_POST['username']),
-				'password'=>trim($_POST['password']),
-				'email'=>trim($_POST['email'])
+				'username'=>	trim($_POST['username']),
+				'password'=>	password_hash(trim($_POST['password']),PASSWORD_DEFAULT),
+				'email'=>		trim($_POST['email']),
+				'ip' =>			trim($_SERVER['REMOTE_ADDR'])
 			]);
+
 
 			if (!$user->getResult()) {
 				\MyApp\FlashMessage::add('Wystąpił błąd podczas dodawania użytkownika do bazy!');
 				\MyApp\Redirect::to('register.php');
 				die();
 			}
+
+			$user = new \MyApp\User(trim($_POST['username']));
+			$order = new \MyApp\Order();
+			$order -> getOrderByHash($_POST['order_code']);
+			
+			if ($order->isExists()) {
+				echo 'dzialam';
+				vA($user->getData()['id']);
+				$order->updateByHash([
+					'client_id' => $user->getData()['id']
+				]);
+			}
+
 			\MyApp\FlashMessage::add('Poprawnie zarejestrowano!');
 			\MyApp\Redirect::to('index.php');
 			die();
@@ -75,7 +100,8 @@ if (isset($_POST['register'])) {
 
 		$form = array(
 			'username'=>trim($_POST['username']),
-			'email'=>trim($_POST['email'])
+			'email'=>trim($_POST['email']),
+			'order_code'=>trim($_POST['order_code'])
 			);
 	}
 }

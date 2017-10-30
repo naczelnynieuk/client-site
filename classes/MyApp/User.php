@@ -123,11 +123,7 @@ class User{
 	public function register($data){
 		$this->_result = null;
 
-		$this->_result = $this->_instance->insert('users', [
-			'username' => $data['username'],
-			'password' => \password_hash($data['password'],PASSWORD_DEFAULT),
-			'email'	   => $data['email']
-			]);
+		$this->_result = $this->_instance->insert('users', $data);
 
 		return $this->_result;
 
@@ -210,4 +206,5 @@ class User{
 
 		return false;
 	}
+
 }

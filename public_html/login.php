@@ -16,6 +16,8 @@ $view = $tpl->createView(['header', 'login', 'footer']);
 $view->title = \MyApp\Config::get('system/default_title').'-login';
 $view->lang = \MyApp\Config::get('system/default_lang');
 $view->charset = \MyApp\Config::get('system/charset');
+$view->url = \MyApp\Config::get('system/url');
+
 
 
 //dla zapamiętywania pól formularza, aby nie bylo udefined

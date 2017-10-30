@@ -10,6 +10,8 @@ $view = $tpl->createView(['header', 'update', 'footer']);
 $view->title = \MyApp\Config::get('system/default_title').' - Update';
 $view->lang = \MyApp\Config::get('system/default_lang');
 $view->charset = \MyApp\Config::get('system/charset');
+$view->url = \MyApp\Config::get('system/url');
+
 
 
 $flash = null;

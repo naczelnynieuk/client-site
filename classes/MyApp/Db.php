@@ -262,6 +262,17 @@ class DB{
 		return $this->_results;
 	}
 
+	public function getSpecialUsers($permission){
+		$bindvalue = array();
+		$sql = 'SELECT users.id, users.username FROM users, permissions WHERE permissions.is_admin ='.$permission.' AND users.id = permissions.user_id';
+		if($this->query($sql, $bindvalue)) {
+			$this->_results = $this->_stmt->fetchAll(\PDO::FETCH_ASSOC);
+			return $this->_results;
+		}
+
+		return 0;
+	}
+
 
 
 

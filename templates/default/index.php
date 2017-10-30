@@ -27,7 +27,7 @@
 <?php echo Helper::linkTo('page.php', 'Profil') ?><br>
 <?php echo Helper::linkTo('update.php', 'Aktualizuj dane') ?><br>
 <?php if ($user['permission'] == 1): ?>
-	<?php echo Helper::linkTo('admin.php', 'Panel Administratora') ?><br>
+	<?php echo Helper::linkTo('admin/index.php', 'Panel Administratora') ?><br>
 <?php endif ?>
 <?php echo Helper::linkTo('logout.php', 'Wyloguj') ?><br>
 <br><br><br>
