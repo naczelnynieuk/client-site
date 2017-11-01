@@ -35,14 +35,11 @@ if ($flash = \MyApp\FlashMessage::render()) {
 }
 
 
-
 if (isset($_POST['order'])) {
   if (\MyApp\Token::check($_POST['token'])){
     $form_data = array();
-
     $form_data[] = new \MyApp\Validation('Nazwa zamówienia',$_POST['order_name'], [
-      'maxlength'=>100,
-      'minlength'=>1,
+      'minlength'=>3,
       'notExistDb'=>'orders/name'
       ]);
 
@@ -64,12 +61,91 @@ if (isset($_POST['order'])) {
           $order = new \MyApp\Order();
           $order->add([
             'coder_id' => trim($_POST['coder']),
+            'client_id' => trim($_POST['client']),
             'name' => trim($_POST['order_name']),
             'hash' => $hash
           ]);
+          \MyApp\FlashMessage::add('Poprawnie dodano zamówienie!');
+          \MyApp\Redirect::to('orders.php');
+          die();
     }
   }
 }
+
+
+if (isset($_GET['usun'])) {
+  if (\MyApp\Token::check($_GET['token'])){
+  $result = \MyApp\Db::getInstance()->delete('orders', ['id', '=', trim($_GET['usun']) ]);
+  $result = \MyApp\Db::getInstance()->delete('orders_messages', ['order_id', '=', trim($_GET['usun']) ]);
+
+
+   \MyApp\FlashMessage::add('Pomyślnie usunięto zamówienie');
+    \MyApp\Redirect::to('orders.php');
+    die();
+  }
+}
+
+
+
+
+
+
+
+
+
+if (isset($_GET['edytuj'])) {
+
+  if (isset($_POST['order_update'])) {
+    if (\MyApp\Token::check($_POST['token'])){
+
+
+        $user->update('orders', ['id','=', $_GET['edytuj']], [
+          'name' => trim($_POST['order_name']),
+          'coder_id' => $_POST['coder'],
+          'client_id' => $_POST['client'],
+          'description' => trim($_POST['description']),
+          'status' => trim($_POST['status']),
+          'url' => $_POST['url'],
+          'beg_date' => $_POST['beg_date'],
+          'end_date' => $_POST['end_date']
+        ]);
+        \MyApp\FlashMessage::add('Poprawnie zaktualizowano dane!');
+        \MyApp\Redirect::to('orders.php?edytuj='.$_GET['edytuj']);
+        die();
+
+    }
+  }
+
+
+    $order = new \MyApp\Order();
+    $order->getById(trim($_GET['edytuj']));
+    $order->addNames();
+
+    $orderdata = $order->getData();
+    if ($order->isExists()) {
+      foreach ($orderdata as $key => $value) {
+        if ($value === '0') {
+          $orderdata[$key] = '';
+        }
+      }
+      $view->order = $orderdata;
+    }else {
+       $view->order = '';
+    }
+
+}else {
+  $view->order = '';
+}
+
+
+
+
+
+
+
+
+
+
 
 
 $coders = \MyApp\Db::getInstance()->getSpecialUsers(2);
@@ -84,6 +160,23 @@ if($user->isExists()){
   $view->user = $user->getData();
 }
 
+
+$orders= \MyApp\Db::getInstance()->select('orders');
+
+if ($orders) {
+
+
+    $maximum = count($orders);
+
+    for ($i=0; $i <$maximum ; $i++) { 
+      $orders[$i]['coder_name'] = \MyApp\Db::getInstance()->getCoderNameFromOrders($orders[$i]['coder_id'] );
+      $orders[$i]['client_name'] = \MyApp\Db::getInstance()->getClientNameFromOrders($orders[$i]['client_id'] );
+    }
+    
+    $view->orders = $orders;
+}else {
+  $view ->orders = null;
+}
 
 $users= \MyApp\Db::getInstance()->select('users');
 if ($users) {

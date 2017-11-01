@@ -262,12 +262,35 @@ class DB{
 		return $this->_results;
 	}
 
-	public function getSpecialUsers($permission){
+	public function getSpecialUsers(){
 		$bindvalue = array();
-		$sql = 'SELECT users.id, users.username FROM users, permissions WHERE permissions.is_admin ='.$permission.' AND users.id = permissions.user_id';
+		$sql = 'SELECT users.id, users.username FROM users, permissions WHERE permissions.is_admin > 0 AND users.id = permissions.user_id';
 		if($this->query($sql, $bindvalue)) {
 			$this->_results = $this->_stmt->fetchAll(\PDO::FETCH_ASSOC);
 			return $this->_results;
+		}
+
+		return 0;
+	}
+
+
+
+	public function getClientNameFromOrders($client){
+		$bindvalue = array();
+		$sql = 'SELECT users.username FROM users WHERE users.id = '.$client;
+		if($this->query($sql, $bindvalue)) {
+			$this->_results = $this->_stmt->fetchAll(\PDO::FETCH_ASSOC);
+			return $this->_results[0]['username'];
+		}
+
+		return 0;
+	}
+	public function getCoderNameFromOrders($coder){
+		$bindvalue = array();
+		$sql = 'SELECT users.username FROM users WHERE users.id = '.$coder;
+		if($this->query($sql, $bindvalue)) {
+			$this->_results = $this->_stmt->fetchAll(\PDO::FETCH_ASSOC);
+			return $this->_results[0]['username'];
 		}
 
 		return 0;

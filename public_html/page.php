@@ -22,8 +22,15 @@ $userdata=array();
 if (isset($_GET['user'])) {
 	$user = new \MyApp\User($_GET['user']);
 	if ($user->isExists()) {
-		echo 'dzialam';
 		$userdata = $user->getData();
+
+
+	foreach ($userdata as $key => $value) {
+		if ($value == '0') {
+			$userdata[$key] = '';
+		}
+	}
+
 		$view->user = $userdata;
 		$view->title = $userdata['username'];
 	}else {
@@ -35,6 +42,15 @@ if (isset($_GET['user'])) {
 	$user = new \MyApp\User();
 	if ($user->isExists()) {
 		$userdata = $user->getData();
+
+
+	foreach ($userdata as $key => $value) {
+		if ($value == '0') {
+			$userdata[$key] = '';
+		}
+	}
+
+
 		$view->user = $userdata;
 		$view->title = $userdata['username'];
 	}
@@ -46,6 +62,7 @@ if (isset($_GET['user'])) {
 
 
 $view->render();
+
 
 
 }catch (Exception $e) {

@@ -24,6 +24,8 @@ $user = new \MyApp\User();
 
 if($user->isExists()){
   $view->user = $user->getData();
+}else{
+	$view->user = null;
 }
 
 $view->render();

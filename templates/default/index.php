@@ -1,45 +1,59 @@
 <?php use MyApp\Tpl\Helper as Helper;?>
-<body>
 
+<?php if (!$user): ?>
+         <div class="jumbotron jumbotron-fluid bg-dark text-white">
+            <div class="container">
+                <h1 class="display-4">Panel Klienta</h1>
+                <blockquote class="blockquote" style="margin-top: 20px;">
+                    <p class="mb-0">Zadowolony Klient to najlepsza strategia biznesowa.</p>
+                    <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Somewhere</cite></footer>
+                </blockquote>
+            </div>
+        </div>
+<?php endif ?>
+
+
+
+<div class="container">
+	
 <?php if (!Helper::checkLogin()): ?>
 	<h2>Witaj na stronie głównej!</h2>
-	<p>Wybierz jedną z poniższych akcji:</p>
-	<?php echo Helper::linkTo('login.php', 'logowanie') ?> <br>
-	<?php echo Helper::linkTo('register.php', 'rejestracja') ?><br><br><br>
+
 
 
 
 <?php if (isset($flash)) {?>
-	<h2>Kominkaty:</h2>
-	<ul>
 	<?php foreach ($flash as $value){ ?>
-		<li><?= escape($value); ?></li>
+	<div class="alert alert-info" role="alert" style="margin-top: 10px;">
+  		<?= escape($value); ?>
+	</div>
 	<?php } ?>
-	</ul>
 <?php } ?>
 
 	
 
 <?php else: ?>
-
-<h2>Witaj <?php echo escape($user['username']); ?></h2>
-
-<?php echo Helper::linkTo('page.php', 'Profil') ?><br>
-<?php echo Helper::linkTo('update.php', 'Aktualizuj dane') ?><br>
-<?php if ($user['permission'] == 1): ?>
-	<?php echo Helper::linkTo('admin/index.php', 'Panel Administratora') ?><br>
-<?php endif ?>
-<?php echo Helper::linkTo('logout.php', 'Wyloguj') ?><br>
-<br><br><br>
-
 <?php if (isset($flash)) {?>
-	<h2>Kominkaty:</h2>
-	<ul>
 	<?php foreach ($flash as $value){ ?>
-		<li><?= escape($value); ?></li>
+	<div class="alert alert-info" role="alert" style="margin-top: 10px;">
+  		<?= escape($value); ?>
+	</div>
 	<?php } ?>
-	</ul>
 <?php } ?>
 
 
+
+<h2>Witaj <?php echo escape($user['username']); ?></h2>
+
+
+
 <?php endif ?>
+
+
+
+
+
+
+
+
+</div>

@@ -42,7 +42,7 @@ class User{
 		$this->_instance = DB::getInstance();
 		$this->_exists = false;
 
-		if (!$user && isset($_SESSION[Config::get('session/session_name')])) {
+		if (($user === null) && isset($_SESSION[Config::get('session/session_name')])) {
 			$user = $_SESSION[Config::get('session/session_name')];
 		}
 		trim($user);
@@ -56,7 +56,7 @@ class User{
  */
 	private function getUser($user=null){
 
-		if (is_int($user)) {
+		if (is_numeric($user)) {
 			$this->_userData = $this->_instance->select('users',['id','=', $user], [
 					'limit'=>1
 				])[0];

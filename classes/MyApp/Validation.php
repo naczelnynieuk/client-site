@@ -5,6 +5,7 @@ class Validation {
 	private $_data,
 			$_name,
 			$_result,
+			$_notRequired,
 			$_options = array();
 
 	private static 	$_errors = array(),
@@ -18,16 +19,24 @@ class Validation {
 		if (!isset(self::$_instance)) {
 			self::$_instance = Db::getInstance();
 		}
+
+		if (isset($options['notRequired']) && $data=='') {
+			$this->_notRequired = true;
+		}
 	}
+
+
 
 	public function validate(){
 		$path = array();
+		
+		if ($this->_notRequired) {
+			return;
+		}
+
 		foreach ($this->_options as $key => $value) {
 			$this->_result = null;
 			switch ($key) {
-				case 'required':
-					$this->required($value);
-					break;
 				case 'maxlength':
 					$this->maxLength($value);
 					break;
@@ -68,14 +77,6 @@ class Validation {
 		return $this->_name;
 	}
 
-
-	private function required($value){
-		if ($value) {
-			if ($this->_data == ''){
-			self::$_errors[]= 'Pole "'.$this->_name. '" nie może być puste!';
-			}
-		}
-	}
 
 	private function equals($value){
 		if (isset($value)) {

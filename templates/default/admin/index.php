@@ -1,4 +1,6 @@
 <?php use MyApp\Tpl\Helper as Helper;?>
+
+<div class="container">
 <?php if (isset($flash)) {?>
 	<h1>Kominkaty:</h1>
 	<ul>
@@ -10,13 +12,15 @@
 <?php } ?>
 
 
-<ul>
-	<li><?php echo Helper::linkTo('users.php', 'Uzytkownicy') ?></li>
-	<li><?php echo Helper::linkTo('orders.php', 'Zamowienia') ?></li>
-</ul>
+<div class="list-group" style="margin-top: 90px;">
+
+  <a href="users.php" class="list-group-item list-group-item-action">Uzytkownicy</a>
+  <a href="orders.php" class="list-group-item list-group-item-action">Zamówienia</a>
+</div>
 
 
 
 
+</div>
 
 <script src="<?php echo $url ?>main.js"></script>

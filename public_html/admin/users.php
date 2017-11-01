@@ -49,7 +49,7 @@ if (isset($_GET['usun'])) {
   }
 
    \MyApp\FlashMessage::add('Pomyślnie usunięto użytkownika');
-    \MyApp\Redirect::to('admin.php');
+    \MyApp\Redirect::to('users.php');
     die();
 }
 
@@ -95,7 +95,7 @@ if (isset($_POST['register'])) {
       }
 
 
-      \MyApp\FlashMessage::add('Poprawnie zarejestrowano!');
+      \MyApp\FlashMessage::add('Poprawnie dodano użytkownika!');
       \MyApp\Redirect::to('users.php');
       die();
     }
@@ -116,8 +116,17 @@ if($user->isExists()){
   $view->user = $user->getData();
 }
 
+
+
 $users= \MyApp\Db::getInstance()->select('users');
 if ($users) {
+  $x=0;
+  foreach ($users as $key => $value) {
+    if ($value['id'] == $userdata['id']) {
+      unset($users[$x]);
+    }
+    $x++;
+  }
   $view ->users = $users;
 }
 

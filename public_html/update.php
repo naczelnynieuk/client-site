@@ -26,6 +26,11 @@ $userdata=array();
 $user = new \MyApp\User();
 if($user->isExists()){
 	$userdata = $user->getData();
+	foreach ($userdata as $key => $value) {
+		if ($value === "0") {
+			$userdata[$key] = '';
+		}
+	}
 	$view->user = $userdata;
 }else{
 	\MyApp\FlashMessage::add('Zaloguj się aby edytować konto!');
@@ -64,8 +69,8 @@ if (isset($_POST['update_password'])) {
 			$user->update('users', ['id','=', $userdata['id']], [
 	  		'password'=> password_hash(trim($_POST['password']),PASSWORD_DEFAULT)
 	  	]);
-			\MyApp\FlashMessage::add('Poprawnie zaktualizowano dane!');
-			\MyApp\Redirect::to('index.php');
+			\MyApp\FlashMessage::add('Poprawnie zaktualizowano hasło!');
+			\MyApp\Redirect::to('update.php');
 			die();
 		}
 	}
@@ -77,9 +82,27 @@ if (isset($_POST['update_basic'])) {
 
 		$form_data[] = new \MyApp\Validation('Email', $_POST['email'], [
 			'maxlength'=>32,
-			'minlength'=>3,
-			'notExistDb'=>'users/email'
+			'minlength'=>3
 		]);
+
+		$form_data[] = new \MyApp\Validation('Numer Telefonu', $_POST['phone_number'], [
+			'maxlength'=>9,
+			'minlength'=>9,
+			'notRequired'=>true
+		]);
+
+		$form_data[] = new \MyApp\Validation('GG', $_POST['gg'], [
+			'maxlength'=>12,
+			'minlength'=>3,
+			'notRequired'=>true
+		]);
+
+		$form_data[] = new \MyApp\Validation('Skype', $_POST['email'], [
+			'maxlength'=>32,
+			'minlength'=>3,
+			'notRequired'=>true
+		]);
+
 
 
 		foreach ($form_data as $data) {
@@ -89,11 +112,14 @@ if (isset($_POST['update_basic'])) {
 		if(!($view->errors = $form_data[0]->getErrors())){
 			// Poprawnie zalogowany
 			$user->update('users', ['id','=', $userdata['id']], [
-	  			'email'=> trim($_POST['email'])
+	  			'email'=> trim($_POST['email']),
+	  			'phone_number'=> trim($_POST['phone_number']),
+	  			'gg'=> trim($_POST['gg']),
+	  			'skype'=> trim($_POST['skype'])
 	  		]);
 	  		
 			\MyApp\FlashMessage::add('Poprawnie zaktualizowano dane!');
-			\MyApp\Redirect::to('index.php');
+			\MyApp\Redirect::to('update.php');
 			die();
 		}
 

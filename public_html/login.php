@@ -70,6 +70,8 @@ if (isset($_POST['login'])) {
 }
 
 
+$view->user = null;
+
 $view->render();
 }catch (Exception $e) {
 	die('Wystąpł błąd: '.$e->getMessage());

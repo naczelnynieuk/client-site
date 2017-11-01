@@ -107,6 +107,8 @@ if (isset($_POST['register'])) {
 }
 
 
+
+$view->user = null;
 $view->form = $form;
 
 $view->render();
